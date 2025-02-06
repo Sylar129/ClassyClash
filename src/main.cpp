@@ -14,10 +14,15 @@ int main() {
   // it as the current working directory so we can load from it
   SearchAndSetResourceDir("resources");
 
-  Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
+  constexpr float kScale = 4.0f;
 
+  Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
   constexpr float kSpeed = 4.0f;
   Vector2 map_pos{};
+
+  Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png");
+  Vector2 knight_pos{kScreenWidth / 2.0f - kScale * 0.5f * knight.width / 6.0f,
+                     kScreenHeight / 2.0f - kScale * 0.5f * knight.height};
 
   while (!WindowShouldClose()) {
     BeginDrawing();
@@ -42,11 +47,19 @@ int main() {
           map_pos, Vector2Scale(Vector2Normalize(direction), kSpeed));
     }
 
-    DrawTextureEx(map, map_pos, 0, 4.0f, WHITE);
+    DrawTextureEx(map, map_pos, 0, kScale, WHITE);
+
+    Rectangle source{0, 0, static_cast<float>(knight.width / 6.0f),
+                     static_cast<float>(knight.height)};
+    Rectangle dest{knight_pos.x, knight_pos.y,
+                   static_cast<float>(knight.width * kScale / 6.0f),
+                   static_cast<float>(knight.height * kScale)};
+    DrawTexturePro(knight, source, dest, Vector2{0, 0}, 0.0f, WHITE);
 
     EndDrawing();
   }
 
+  UnloadTexture(knight);
   UnloadTexture(map);
 
   CloseWindow();
