@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "raymath.h"
 #include "resource_dir.h"  // utility header for SearchAndSetResourceDir
 
 int main() {
@@ -15,12 +16,33 @@ int main() {
 
   Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
 
+  constexpr float kSpeed = 4.0f;
+  Vector2 map_pos{};
+
   while (!WindowShouldClose()) {
     BeginDrawing();
 
     ClearBackground(BLACK);
 
-    DrawTextureEx(map, {0, 0}, 0, 4.0f, WHITE);
+    Vector2 direction{};
+    if (IsKeyDown(KEY_A)) {
+      direction.x -= 1;
+    }
+    if (IsKeyDown(KEY_D)) {
+      direction.x += 1;
+    }
+    if (IsKeyDown(KEY_W)) {
+      direction.y -= 1;
+    }
+    if (IsKeyDown(KEY_S)) {
+      direction.y += 1;
+    }
+    if (Vector2Length(direction) != 0) {
+      map_pos = Vector2Subtract(
+          map_pos, Vector2Scale(Vector2Normalize(direction), kSpeed));
+    }
+
+    DrawTextureEx(map, map_pos, 0, 4.0f, WHITE);
 
     EndDrawing();
   }
