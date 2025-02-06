@@ -20,16 +20,26 @@ int main() {
   constexpr float kSpeed = 4.0f;
   Vector2 map_pos{};
 
-  Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png");
-  Vector2 knight_pos{kScreenWidth / 2.0f - kScale * 0.5f * knight.width / 6.0f,
-                     kScreenHeight / 2.0f - kScale * 0.5f * knight.height};
+  Texture2D knight_idle = LoadTexture("characters/knight_idle_spritesheet.png");
+  Texture2D knight_run = LoadTexture("characters/knight_run_spritesheet.png");
+  Vector2 knight_pos{
+      kScreenWidth / 2.0f - kScale * 0.5f * knight_idle.width / 6.0f,
+      kScreenHeight / 2.0f - kScale * 0.5f * knight_idle.height};
   // 1: facing right, -1 : facing left
   float right_left{1};
+  // animation
+  float running_time{};
+  int frame{};
+  constexpr int kMaxFrame = 6;
+  constexpr float kUpdateTime = 1.0f / 12.0f;
 
   while (!WindowShouldClose()) {
     BeginDrawing();
 
     ClearBackground(BLACK);
+
+    // draw map
+    DrawTextureEx(map, map_pos, 0, kScale, WHITE);
 
     Vector2 direction{};
     if (IsKeyDown(KEY_A)) {
@@ -51,9 +61,19 @@ int main() {
       right_left = direction.x > 0 ? 1 : -1;
     }
 
-    DrawTextureEx(map, map_pos, 0, kScale, WHITE);
+    Texture2D& knight =
+        Vector2Length(direction) != 0 ? knight_run : knight_idle;
 
-    Rectangle source{0, 0, right_left * static_cast<float>(knight.width / 6.0f),
+    // update animation
+    running_time += GetFrameTime();
+    if (running_time >= kUpdateTime) {
+      running_time = 0;
+      frame = (frame + 1) % kMaxFrame;
+    }
+
+    // draw character
+    Rectangle source{knight.width / 6.0f * frame, 0,
+                     right_left * static_cast<float>(knight.width / 6.0f),
                      static_cast<float>(knight.height)};
     Rectangle dest{knight_pos.x, knight_pos.y,
                    static_cast<float>(knight.width * kScale / 6.0f),
@@ -63,7 +83,8 @@ int main() {
     EndDrawing();
   }
 
-  UnloadTexture(knight);
+  UnloadTexture(knight_idle);
+  UnloadTexture(knight_run);
   UnloadTexture(map);
 
   CloseWindow();
