@@ -23,6 +23,8 @@ int main() {
   Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png");
   Vector2 knight_pos{kScreenWidth / 2.0f - kScale * 0.5f * knight.width / 6.0f,
                      kScreenHeight / 2.0f - kScale * 0.5f * knight.height};
+  // 1: facing right, -1 : facing left
+  float right_left{1};
 
   while (!WindowShouldClose()) {
     BeginDrawing();
@@ -45,11 +47,13 @@ int main() {
     if (Vector2Length(direction) != 0) {
       map_pos = Vector2Subtract(
           map_pos, Vector2Scale(Vector2Normalize(direction), kSpeed));
+
+      right_left = direction.x > 0 ? 1 : -1;
     }
 
     DrawTextureEx(map, map_pos, 0, kScale, WHITE);
 
-    Rectangle source{0, 0, static_cast<float>(knight.width / 6.0f),
+    Rectangle source{0, 0, right_left * static_cast<float>(knight.width / 6.0f),
                      static_cast<float>(knight.height)};
     Rectangle dest{knight_pos.x, knight_pos.y,
                    static_cast<float>(knight.width * kScale / 6.0f),
