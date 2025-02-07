@@ -2,6 +2,24 @@
 #include "raymath.h"
 #include "resource_dir.h"  // utility header for SearchAndSetResourceDir
 
+class Character {
+ public:
+  Vector2 GetWorldPos() const { return world_pos_; }
+
+ private:
+  Texture2D idle_;
+  Texture2D run_;
+  Vector2 screen_pos_;
+  Vector2 world_pos_;
+  // 1: facing right, -1 : facing left
+  float right_left_{1};
+  // animation
+  float running_time_{};
+  int frame_{};
+  static constexpr int kMaxFrame_{6};
+  static constexpr float kUpdateTime_{1.0f / 12.0f};
+};
+
 int main() {
   // Tell the window to use vsync and work on high DPI displays
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
