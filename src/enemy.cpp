@@ -7,8 +7,8 @@ Enemy::Enemy(int window_width, int window_height) {
   active_texture_ = &idle_;
   width_ = idle_.width / 6.0f;
   height_ = idle_.height;
-  // screen_pos_ = {window_width / 2.0f - scale_ * 0.5f * width_,
-  //                window_height / 2.0f - scale_ * 0.5f * height_};
+  world_pos_ = {0.0f, 0.0f};
+  speed_ = 40.f;
 }
 
 Enemy::~Enemy() {
@@ -17,17 +17,11 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Tick(float delta_time) {
-  world_pos_last_frame_ = world_pos_;
-  // update animation
-  running_time_ += delta_time;
-  if (running_time_ >= update_time_) {
-    running_time_ = 0;
-    frame_ = (frame_ + 1) % max_frame_;
-  }
+  auto direction =
+      Vector2Normalize(Vector2Subtract(target_->GetScreenPos(), screen_pos_));
+  world_pos_ =
+      Vector2Add(world_pos_, Vector2Scale(direction, speed_ * delta_time));
+  screen_pos_ = Vector2Subtract(world_pos_, target_->GetWorldPos());
 
-  // draw character
-  Rectangle source{width_ * frame_, 0, right_left_ * width_, height_};
-  Rectangle dest{screen_pos_.x, screen_pos_.y, width_ * scale_,
-                 height_ * scale_};
-  DrawTexturePro(*active_texture_, source, dest, Vector2{0, 0}, 0.0f, WHITE);
+  BaseCharacter::Tick(delta_time);
 }

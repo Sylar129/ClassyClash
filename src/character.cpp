@@ -17,7 +17,7 @@ Character::~Character() {
 }
 
 void Character::Tick(float delta_time) {
-  world_pos_last_frame_ = world_pos_;
+  BaseCharacter::Tick(delta_time);
 
   Vector2 direction{};
   if (IsKeyDown(KEY_A)) {
@@ -41,17 +41,4 @@ void Character::Tick(float delta_time) {
   } else {
     active_texture_ = &idle_;
   }
-
-  // update animation
-  running_time_ += delta_time;
-  if (running_time_ >= update_time_) {
-    running_time_ = 0;
-    frame_ = (frame_ + 1) % max_frame_;
-  }
-
-  // draw character
-  Rectangle source{width_ * frame_, 0, right_left_ * width_, height_};
-  Rectangle dest{screen_pos_.x, screen_pos_.y, width_ * scale_,
-                 height_ * scale_};
-  DrawTexturePro(*active_texture_, source, dest, Vector2{0, 0}, 0.0f, WHITE);
 }

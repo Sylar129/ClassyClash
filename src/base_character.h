@@ -6,7 +6,7 @@ class BaseCharacter {
  public:
   virtual ~BaseCharacter() = default;
   Vector2 GetWorldPos() const;
-   virtual void Tick(float delta_time);
+  virtual void Tick(float delta_time);
   void undoMovement();
   Rectangle GetCollisionRec() const;
 

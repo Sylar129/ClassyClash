@@ -24,6 +24,7 @@ int main() {
 
   Character knight{kScreenWidth, kScreenHeight};
   Enemy goblin{kScreenWidth, kScreenHeight};
+  goblin.setTarget(&knight);
   Prop props[2] = {
       Prop{Vector2{400, 400}, LoadTexture("nature_tileset/Rock.png")},
       Prop{Vector2{600, 600}, LoadTexture("nature_tileset/Log.png")}};
