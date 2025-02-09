@@ -58,6 +58,12 @@ int main() {
       }
     }
 
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+      bool killed = CheckCollisionRecs(knight.GetWeaponCollisionRec(),
+                                       goblin.GetCollisionRec());
+      goblin.setAlive(!killed);
+    }
+
     EndDrawing();
   }
 

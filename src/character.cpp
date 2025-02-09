@@ -17,6 +17,9 @@ Character::~Character() {
 }
 
 void Character::Tick(float delta_time) {
+  if (!IsAlive()) {
+    return;
+  }
   if (IsKeyDown(KEY_A)) {
     velocity_.x -= 1;
   }
@@ -31,4 +34,34 @@ void Character::Tick(float delta_time) {
   }
 
   BaseCharacter::Tick(delta_time);
+
+  // draw weapon
+
+  Vector2 origin{};
+  Vector2 offset{};
+  float rotation{};
+  if (right_left_ > 0) {
+    origin = {0.f, weapon_.height * scale_};
+    offset = {35, 55};
+    weapon_collition_rec_ = {screen_pos_.x + offset.x,
+                             screen_pos_.y + offset.y - weapon_.height * scale_,
+                             weapon_.width * scale_, weapon_.height * scale_};
+    ;
+    rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? 35.0f : 0;
+  } else {
+    origin = {weapon_.width * scale_, weapon_.height * scale_};
+    offset = {25, 55};
+    weapon_collition_rec_ = {screen_pos_.x + offset.x - weapon_.width * scale_,
+                             screen_pos_.y + offset.y - weapon_.height * scale_,
+                             weapon_.width * scale_, weapon_.height * scale_};
+    rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? -35.0f : 0;
+  }
+
+  Rectangle source{0, 0, static_cast<float>(weapon_.width) * right_left_,
+                   static_cast<float>(weapon_.height)};
+  Rectangle dest{screen_pos_.x + offset.x, screen_pos_.y + offset.y,
+                 weapon_.width * scale_, weapon_.height * scale_};
+  DrawTexturePro(weapon_, source, dest, origin, rotation, WHITE);
+
+  DrawRectangleLinesEx(weapon_collition_rec_, 2.0f, RED);
 }

@@ -17,6 +17,9 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Tick(float delta_time) {
+  if (!IsAlive()) {
+    return;
+  }
   velocity_ = Vector2Subtract(target_->GetScreenPos(), screen_pos_);
 
   screen_pos_ = Vector2Subtract(world_pos_, target_->GetWorldPos());

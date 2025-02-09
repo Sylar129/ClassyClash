@@ -9,6 +9,8 @@ class BaseCharacter {
   virtual void Tick(float delta_time);
   void undoMovement();
   Rectangle GetCollisionRec() const;
+  bool IsAlive() const { return alive_; }
+  void setAlive(bool alive) { alive_ = alive; }
 
  protected:
   Texture2D* active_texture_;
@@ -29,4 +31,7 @@ class BaseCharacter {
   Vector2 world_pos_last_frame_{};
   float scale_{4.0f};
   Vector2 velocity_{};
+
+ private:
+  bool alive_{true};
 };
