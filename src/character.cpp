@@ -17,28 +17,18 @@ Character::~Character() {
 }
 
 void Character::Tick(float delta_time) {
-  BaseCharacter::Tick(delta_time);
-
-  Vector2 direction{};
   if (IsKeyDown(KEY_A)) {
-    direction.x -= 1;
+    velocity_.x -= 1;
   }
   if (IsKeyDown(KEY_D)) {
-    direction.x += 1;
+    velocity_.x += 1;
   }
   if (IsKeyDown(KEY_W)) {
-    direction.y -= 1;
+    velocity_.y -= 1;
   }
   if (IsKeyDown(KEY_S)) {
-    direction.y += 1;
+    velocity_.y += 1;
   }
-  if (Vector2Length(direction) != 0) {
-    world_pos_ = Vector2Add(world_pos_,
-                            Vector2Scale(Vector2Normalize(direction), speed_));
 
-    right_left_ = direction.x > 0 ? 1 : -1;
-    active_texture_ = &run_;
-  } else {
-    active_texture_ = &idle_;
-  }
+  BaseCharacter::Tick(delta_time);
 }

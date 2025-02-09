@@ -28,4 +28,5 @@ class BaseCharacter {
   float height_;
   Vector2 world_pos_last_frame_{};
   float scale_{4.0f};
+  Vector2 velocity_{};
 };

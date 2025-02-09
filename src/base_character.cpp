@@ -1,6 +1,8 @@
 
 #include "base_character.h"
 
+#include "raymath.h"
+
 Vector2 BaseCharacter::GetWorldPos() const { return world_pos_; }
 
 void BaseCharacter::Tick(float delta_time) {
@@ -11,6 +13,17 @@ void BaseCharacter::Tick(float delta_time) {
     running_time_ = 0;
     frame_ = (frame_ + 1) % max_frame_;
   }
+
+  if (Vector2Length(velocity_) != 0) {
+    world_pos_ = Vector2Add(world_pos_,
+                            Vector2Scale(Vector2Normalize(velocity_), speed_));
+
+    right_left_ = velocity_.x > 0 ? 1 : -1;
+    active_texture_ = &run_;
+  } else {
+    active_texture_ = &idle_;
+  }
+  velocity_ = {};
 
   // draw character
   Rectangle source{width_ * frame_, 0, right_left_ * width_, height_};
