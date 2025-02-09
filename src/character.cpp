@@ -1,8 +1,10 @@
 #include "character.h"
 
-Character::Character() {
+Character::Character(int window_width, int window_height) {
   width_ = idle_.width / 6.0f;
   height_ = idle_.height;
+  screen_pos_ = {window_width / 2.0f - 4.0f * 0.5f * width_,
+                 window_height / 2.0f - 4.0f * 0.5f * height_};
 }
 
 Character::~Character() {
@@ -11,11 +13,6 @@ Character::~Character() {
 }
 
 Vector2 Character::GetWorldPos() const { return world_pos_; }
-
-void Character::SetScreenPos(int window_width, int window_height) {
-  screen_pos_ = {window_width / 2.0f - 4.0f * 0.5f * width_,
-                 window_height / 2.0f - 4.0f * 0.5f * height_};
-}
 
 void Character::Tick(float delta_time) {
   world_pos_last_frame_ = world_pos_;

@@ -3,10 +3,9 @@
 
 class Character {
  public:
-  Character();
+  Character(int window_width, int window_height);
   ~Character();
   Vector2 GetWorldPos() const;
-  void SetScreenPos(int window_width, int window_height);
   void Tick(float delta_time);
   void undoMovement();
 

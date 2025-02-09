@@ -1,4 +1,5 @@
 #include "character.h"
+#include "prop.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "resource_dir.h"  // utility header for SearchAndSetResourceDir
@@ -19,8 +20,8 @@ int main() {
   Vector2 map_pos{};
   constexpr float kMapScale = 4.0f;
 
-  Character knight;
-  knight.SetScreenPos(kScreenWidth, kScreenHeight);
+  Character knight{kScreenWidth, kScreenHeight};
+  Prop rock{Vector2{200, 200}, LoadTexture("nature_tileset/Rock.png")};
 
   while (!WindowShouldClose()) {
     BeginDrawing();
@@ -41,6 +42,7 @@ int main() {
     }
 
     knight.Tick(GetFrameTime());
+    rock.Render(world_pos);
 
     EndDrawing();
   }
