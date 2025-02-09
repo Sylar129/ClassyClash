@@ -16,22 +16,31 @@ int main() {
   SearchAndSetResourceDir("resources");
 
   Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
-  constexpr float kSpeed = 4.0f;
   Vector2 map_pos{};
   constexpr float kMapScale = 4.0f;
 
   Character knight;
-  knight.setScreenPos(kScreenWidth, kScreenHeight);
+  knight.SetScreenPos(kScreenWidth, kScreenHeight);
 
   while (!WindowShouldClose()) {
     BeginDrawing();
 
     ClearBackground(BLACK);
 
-    map_pos = Vector2Scale(knight.GetWorldPos(), -1);
+    auto world_pos = knight.GetWorldPos();
+
+    map_pos = Vector2Scale(world_pos, -1);
     // draw map
     DrawTextureEx(map, map_pos, 0, kMapScale, WHITE);
-    knight.tick(GetFrameTime());
+
+    // need improvement
+    if (world_pos.x < 0.0f || world_pos.y < 0.0f ||
+        world_pos.x + kScreenWidth > map.width * kMapScale ||
+        world_pos.y + kScreenHeight > map.height * kMapScale) {
+      knight.undoMovement();
+    }
+
+    knight.Tick(GetFrameTime());
 
     EndDrawing();
   }

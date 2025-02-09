@@ -12,12 +12,14 @@ Character::~Character() {
 
 Vector2 Character::GetWorldPos() const { return world_pos_; }
 
-void Character::setScreenPos(int window_width, int window_height) {
+void Character::SetScreenPos(int window_width, int window_height) {
   screen_pos_ = {window_width / 2.0f - 4.0f * 0.5f * width_,
                  window_height / 2.0f - 4.0f * 0.5f * height_};
 }
 
-void Character::tick(float delta_time) {
+void Character::Tick(float delta_time) {
+  world_pos_last_frame_ = world_pos_;
+
   Vector2 direction{};
   if (IsKeyDown(KEY_A)) {
     direction.x -= 1;
@@ -33,7 +35,7 @@ void Character::tick(float delta_time) {
   }
   if (Vector2Length(direction) != 0) {
     world_pos_ = Vector2Add(world_pos_,
-                            Vector2Scale(Vector2Normalize(direction), kSpeed));
+                            Vector2Scale(Vector2Normalize(direction), speed_));
 
     right_left_ = direction.x > 0 ? 1 : -1;
     active_texture_ = &run_;
@@ -49,8 +51,9 @@ void Character::tick(float delta_time) {
   }
 
   // draw character
-  Rectangle source{active_texture_->width / 6.0f * frame_, 0,
-                   right_left_ * width_, height_};
+  Rectangle source{width_ * frame_, 0, right_left_ * width_, height_};
   Rectangle dest{screen_pos_.x, screen_pos_.y, width_ * 4.0f, height_ * 4.0f};
   DrawTexturePro(*active_texture_, source, dest, Vector2{0, 0}, 0.0f, WHITE);
 }
+
+void Character::undoMovement() { world_pos_ = world_pos_last_frame_; }
