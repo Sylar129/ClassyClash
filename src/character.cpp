@@ -3,8 +3,8 @@
 Character::Character(int window_width, int window_height) {
   width_ = idle_.width / 6.0f;
   height_ = idle_.height;
-  screen_pos_ = {window_width / 2.0f - 4.0f * 0.5f * width_,
-                 window_height / 2.0f - 4.0f * 0.5f * height_};
+  screen_pos_ = {window_width / 2.0f - scale_ * 0.5f * width_,
+                 window_height / 2.0f - scale_ * 0.5f * height_};
 }
 
 Character::~Character() {
@@ -49,8 +49,14 @@ void Character::Tick(float delta_time) {
 
   // draw character
   Rectangle source{width_ * frame_, 0, right_left_ * width_, height_};
-  Rectangle dest{screen_pos_.x, screen_pos_.y, width_ * 4.0f, height_ * 4.0f};
+  Rectangle dest{screen_pos_.x, screen_pos_.y, width_ * scale_,
+                 height_ * scale_};
   DrawTexturePro(*active_texture_, source, dest, Vector2{0, 0}, 0.0f, WHITE);
 }
 
 void Character::undoMovement() { world_pos_ = world_pos_last_frame_; }
+
+Rectangle Character::GetCollisionRec() const {
+  return Rectangle{screen_pos_.x, screen_pos_.y, width_ * scale_,
+                   height_ * scale_};
+}

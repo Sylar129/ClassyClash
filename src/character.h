@@ -8,6 +8,7 @@ class Character {
   Vector2 GetWorldPos() const;
   void Tick(float delta_time);
   void undoMovement();
+  Rectangle GetCollisionRec() const;
 
  private:
   Texture2D* active_texture_;
@@ -26,4 +27,5 @@ class Character {
   float width_;
   float height_;
   Vector2 world_pos_last_frame_{};
+  float scale_{4.0f};
 };
