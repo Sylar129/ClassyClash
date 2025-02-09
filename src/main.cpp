@@ -1,4 +1,6 @@
+
 #include "character.h"
+#include "enemy.h"
 #include "prop.h"
 #include "raylib.h"
 #include "raymath.h"
@@ -21,6 +23,7 @@ int main() {
   constexpr float kMapScale = 4.0f;
 
   Character knight{kScreenWidth, kScreenHeight};
+  Enemy goblin{kScreenWidth, kScreenHeight};
   Prop props[2] = {
       Prop{Vector2{400, 400}, LoadTexture("nature_tileset/Rock.png")},
       Prop{Vector2{600, 600}, LoadTexture("nature_tileset/Log.png")}};
@@ -39,6 +42,7 @@ int main() {
     }
 
     knight.Tick(GetFrameTime());
+    goblin.Tick(GetFrameTime());
 
     if (knight.GetWorldPos().x < 0.0f || knight.GetWorldPos().y < 0.0f ||
         knight.GetWorldPos().x + kScreenWidth > map.width * kMapScale ||

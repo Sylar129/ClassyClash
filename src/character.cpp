@@ -1,6 +1,10 @@
+
 #include "character.h"
 
 Character::Character(int window_width, int window_height) {
+  idle_ = LoadTexture("characters/knight_idle_spritesheet.png");
+  run_ = LoadTexture("characters/knight_run_spritesheet.png");
+  active_texture_ = &idle_;
   width_ = idle_.width / 6.0f;
   height_ = idle_.height;
   screen_pos_ = {window_width / 2.0f - scale_ * 0.5f * width_,
@@ -11,8 +15,6 @@ Character::~Character() {
   UnloadTexture(idle_);
   UnloadTexture(run_);
 }
-
-Vector2 Character::GetWorldPos() const { return world_pos_; }
 
 void Character::Tick(float delta_time) {
   world_pos_last_frame_ = world_pos_;
@@ -52,11 +54,4 @@ void Character::Tick(float delta_time) {
   Rectangle dest{screen_pos_.x, screen_pos_.y, width_ * scale_,
                  height_ * scale_};
   DrawTexturePro(*active_texture_, source, dest, Vector2{0, 0}, 0.0f, WHITE);
-}
-
-void Character::undoMovement() { world_pos_ = world_pos_last_frame_; }
-
-Rectangle Character::GetCollisionRec() const {
-  return Rectangle{screen_pos_.x, screen_pos_.y, width_ * scale_,
-                   height_ * scale_};
 }
